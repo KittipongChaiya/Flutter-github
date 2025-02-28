@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/screens/item.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myproject/screens/register.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         toolbarHeight: 60,
       ),
-      
+
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -98,6 +99,14 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text('เข้าสู่ระบบ', style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 190, 136, 116))),),
                 ),
+                SizedBox(width: 20,),
+              ElevatedButton(
+                onPressed: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (ctx) =>  RegisterPage()));
+                },
+                child: Text("สมัครสมาชิก",style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Color.fromARGB(255, 116, 142, 190))),),
+              ),
               ],
             ),
           ),
