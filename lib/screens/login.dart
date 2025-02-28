@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         toolbarHeight: 60,
       ),
+      
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   onSaved: (value) => _email = value!,
                 ),
+
                 SizedBox(height: 20),
                 TextFormField(
                   decoration: InputDecoration(
@@ -64,7 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   onSaved: (value) => _password = value!,
                 ),
-                SizedBox(height: 35),
+
+                SizedBox(height: 3),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
