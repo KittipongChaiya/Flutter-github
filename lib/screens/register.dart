@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/images/pic2.png',
+                'assets/images/w.png',
                 width: 200,
                 height: 200
               ),
