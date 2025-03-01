@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/screens/login.dart';
-import 'package:postgres/postgres.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class RegisterPage extends StatefulWidget {
@@ -17,50 +18,39 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Function สำหรับเชื่อมต่อและบันทึกข้อมูลลง PostgreSQL
   Future<void> _registerUser() async {
-    try {
-      // เชื่อมต่อฐานข้อมูล PostgreSQL
-      final connection = await Connection.open(
-        Endpoint(
-          host: 'localhost',
-          port: 5432,
-          database: 'db_login',
-          username: 'postgres',
-          password: '1234',
-        ),
-        settings: const ConnectionSettings(sslMode: SslMode.disable),
-      );
+  final url = Uri.parse('http://10.0.2.2:3000/api/auth/register');
+  
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'username': _usernameController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }),
+    );
 
-      // คำสั่ง SQL สำหรับบันทึกข้อมูลผู้ใช้
-      await connection.execute(
-        'INSERT INTO users (username, email, password) VALUES (@username, @email, @password)',
-        parameters: {
-          'username': _usernameController.text,
-          'email': _emailController.text,
-          'password': _passwordController.text,
-        },
-      );
-
-      // ปิดการเชื่อมต่อ
-      await connection.close();
-
-      // แสดง Snackbar เมื่อสมัครสมาชิกสำเร็จ
+    if (response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('สมัครสมาชิกสำเร็จ', style: GoogleFonts.kanit())),
       );
-
-      // นำทางไปหน้า Login
+      
       Navigator.pushReplacement(
         context, 
         MaterialPageRoute(builder: (ctx) => LoginPage())
       );
-
-    } catch (e) {
-      // จัดการข้อผิดพลาดในการเชื่อมต่อหรือบันทึกข้อมูล
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e', style: GoogleFonts.kanit())),
+        SnackBar(content: Text('การสมัครล้มเหลว', style: GoogleFonts.kanit())),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('เกิดข้อผิดพลาด: $e', style: GoogleFonts.kanit())),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
