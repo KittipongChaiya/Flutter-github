@@ -46,10 +46,6 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
-        
-        // บันทึก Token และ User ID
-        // คุณอาจต้องสร้าง SharedPreferences เพื่อเก็บ Token
-        // await saveToken(responseData['token']);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
