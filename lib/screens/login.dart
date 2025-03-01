@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   onSaved: (value) => _password = value!,
                 ),
 
-                SizedBox(height: 3),
+                SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -99,8 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text('เข้าสู่ระบบ', style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 190, 136, 116))),),
                 ),
-                SizedBox(width: 20,),
-              ElevatedButton(
+
+                SizedBox(height: 10,),
+                ElevatedButton(
                 onPressed: (){
                   Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (ctx) =>  RegisterPage()));
