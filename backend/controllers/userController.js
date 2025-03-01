@@ -1,5 +1,4 @@
 const { Pool } = require('pg');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const pool = new Pool({
@@ -14,11 +13,7 @@ exports.registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    // Hash password
-    const saltRounds = 10;
-    //const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Insert user to database
+    // เพิ่มข้อมูลในตาราง users
     const query = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *';
     const values = [username, email, password];
     
@@ -30,7 +25,7 @@ exports.registerUser = async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ message: 'Registration failed' });
+    res.status(500).json({ message: 'Registration failed', error: error.toString() });
   }
 };
 
@@ -38,31 +33,33 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // Check user in database
-    const query = 'SELECT * FROM users WHERE email = $1';
-    const result = await pool.query(query, [email]);
+    // เชคข้อมูลในตาราง users
+    const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
+    const result = await pool.query(query, [email, password]);
     
     if (result.rows.length === 0) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' });
     }
 
     const user = result.rows[0];
-    const isMatch = await bcrypt.compare(password, user.password);
-    
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
 
-    // Generate JWT token
+    // สร้าง Token
     const token = jwt.sign(
       { userId: user.id, email: user.email }, 
-      'YOUR_SECRET_KEY', 
+      process.env.JWT_SECRET, 
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({ token, userId: user.id });
+    res.status(200).json({ 
+      token, 
+      userId: user.id,
+      message: 'เข้าสู่ระบบสำเร็จ' 
+    });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Login failed' });
+    res.status(500).json({ 
+      message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ', 
+      error: error.toString() 
+    });
   }
 };
