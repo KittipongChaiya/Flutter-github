@@ -16,11 +16,31 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isEmailAvailable = true;
+  
+  bool _isValidEmail(String email) {
+  final emailRegex = RegExp(
+    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+  );
+  return emailRegex.hasMatch(email);
+}
 
    Future<void> _checkEmailAvailability() async {
     if (_emailController.text.isEmpty) {
       return;
     }
+
+     if (!_isValidEmail(_emailController.text)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'รูปแบบอีเมลไม่ถูกต้อง',
+          style: GoogleFonts.kanit(),
+        ),
+        backgroundColor: Colors.orange,
+      ),
+    );
+    return;
+  }
 
     final url = Uri.parse('http://10.0.2.2:3000/api/auth/check-email');
     
@@ -80,7 +100,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('สมัครสมาชิกสำเร็จ', style: GoogleFonts.kanit())),
+        SnackBar(content: Text('สมัครสมาชิกสำเร็จ', style: GoogleFonts.kanit()),
+        backgroundColor: Colors.green,
+        ),
       );
       
       Navigator.pushReplacement(
@@ -89,7 +111,9 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('การสมัครล้มเหลว', style: GoogleFonts.kanit())),
+        SnackBar(content: Text('การสมัครล้มเหลว', style: GoogleFonts.kanit()),
+        backgroundColor: Colors.red,
+        ),
       );
     }
   } catch (e) {
@@ -161,6 +185,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (!_isEmailAvailable) {
                     return 'อีเมลนี้มีอยู่ในระบบแล้ว';
                   }
+                  if (!_isValidEmail(value)) {
+                    return 'รูปแบบอีเมลไม่ถูกต้อง';
+                  }
                   return null;
                 },
               ),
@@ -197,13 +224,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
               SizedBox(height: 10),
               
-              ElevatedButton(
+              /*ElevatedButton(
                 onPressed: (){
                   Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (ctx) =>  LoginPage()));
                 },
                 child: Text("เข้าสู่ระบบ",style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Color.fromARGB(255, 116, 142, 190))),),
-              ),
+              ),*/
             ],
           ),
         ),
