@@ -63,3 +63,24 @@ exports.loginUser = async (req, res) => {
     });
   }
 };
+
+exports.checkEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    const query = 'SELECT * FROM users WHERE email = $1';
+    const result = await pool.query(query, [email]);
+    
+    if (result.rows.length > 0) {
+      return res.status(409).json({ message: 'อีเมลนี้มีอยู่ในระบบแล้ว' });
+    }
+
+    res.status(200).json({ message: 'อีเมลนี้สามารถใช้งานได้' });
+  } catch (error) {
+    console.error('Email check error:', error);
+    res.status(500).json({ 
+      message: 'เกิดข้อผิดพลาดในการตรวจสอบอีเมล', 
+      error: error.toString() 
+    });
+  }
+};
