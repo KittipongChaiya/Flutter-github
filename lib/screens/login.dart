@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'อีเมล',
+                  labelText: 'อีเมลล์',
                   labelStyle: GoogleFonts.kanit(
                     textStyle: TextStyle(
                       fontSize: 20, 
