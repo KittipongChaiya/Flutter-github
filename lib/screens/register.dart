@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/screens/login.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 
 
 class RegisterPage extends StatefulWidget {
@@ -16,13 +17,30 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isEmailAvailable = true;
-  
+  Timer? _debounce;
+
   bool _isValidEmail(String email) {
   final emailRegex = RegExp(
     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
   );
   return emailRegex.hasMatch(email);
 }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onEmailChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (_isValidEmail(value)) {
+        _checkEmailAvailability();
+      }
+    });
+  }
 
    Future<void> _checkEmailAvailability() async {
     if (_emailController.text.isEmpty) {
@@ -79,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     }
   } catch (e) {
-    print('Error checking email: $e');
+    print('เกิดข้อผิดพลาดในการตรวจสอบอีเมล: $e');
   }
 }
 
@@ -177,6 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   setState(() {
                     _isEmailAvailable = true;
                   });
+                  _onEmailChanged(value);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
