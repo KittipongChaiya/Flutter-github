@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:myproject/screens/home.dart';
 import 'package:myproject/screens/item.dart';
 import 'dart:convert';
 import 'package:myproject/screens/register.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -47,6 +49,9 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('jwt_token', responseData['token']);
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -60,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
         // นำทางไปหน้าหลัก
         Navigator.pushReplacement(
           context, 
-          MaterialPageRoute(builder: (context) => Item())
+          MaterialPageRoute(builder: (context) => Home())
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
