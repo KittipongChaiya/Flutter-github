@@ -33,27 +33,31 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // เชคข้อมูลในตาราง users
     const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
     const result = await pool.query(query, [email, password]);
-    
+
     if (result.rows.length === 0) {
-      return res.status(401).json({ message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' });
+      return res.status(401).json({ 
+        message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' 
+      });
     }
 
     const user = result.rows[0];
-
-    // สร้าง Token
+    
+    // แก้ไข payload ของ token
     const token = jwt.sign(
-      { userId: user.id, email: user.email }, 
-      process.env.JWT_SECRET, 
+      { id: user.id }, // ใช้ id แทน userId
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
     res.status(200).json({ 
-      token, 
-      userId: user.id,
-      message: 'เข้าสู่ระบบสำเร็จ' 
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -80,6 +84,36 @@ exports.checkEmail = async (req, res) => {
     console.error('Email check error:', error);
     res.status(500).json({ 
       message: 'เกิดข้อผิดพลาดในการตรวจสอบอีเมล', 
+      error: error.toString() 
+    });
+  }
+};
+
+exports.getUserData = async (req, res) => {
+  try {
+    const userId = req.user.id; // มาจาก JWT token
+    
+    // ตรวจสอบว่า userId มีค่าหรือไม่
+    if (!userId) {
+      return res.status(400).json({ 
+        message: 'ไม่พบข้อมูลผู้ใช้ใน Token' 
+      });
+    }
+
+    const query = 'SELECT username, email FROM users WHERE id = $1';
+    const result = await pool.query(query, [userId]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ 
+        message: 'ไม่พบข้อมูลผู้ใช้ในระบบ' 
+      });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ 
+      message: 'เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้', 
       error: error.toString() 
     });
   }
