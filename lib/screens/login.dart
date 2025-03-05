@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:myproject/screens/home.dart';
-import 'package:myproject/screens/item.dart';
 import 'dart:convert';
 import 'package:myproject/screens/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
