@@ -4,6 +4,7 @@ import 'package:myproject/screens/item.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myproject/screens/login.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -66,6 +67,29 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<void> _logout() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('jwt_token'); // ลบ token ออกจาก local storage
+      
+      // นำผู้ใช้กลับไปยังหน้า Login
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (route) => false, // ลบทุก route ก่อนหน้านี้ออกจาก stack
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'เกิดข้อผิดพลาดในการออกจากระบบ: ${e.toString()}',
+            style: GoogleFonts.kanit(),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,9 +117,15 @@ class _HomeState extends State<Home> {
               ),
             ),
             ListTile(
-              title: Text('Items'),
+              title: Text('จัดการข้อมูล',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Item()));
+              },
+            ),
+            ListTile(
+              title: Text('ออกจากระบบ',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
+              onTap: () {
+                _logout();
               },
             ),
           ],
@@ -117,29 +147,29 @@ class _HomeState extends State<Home> {
                 ),
               ),
 
-            const SizedBox(height: 40),
+            SizedBox(height: 10),
 
             Text('ยินดีต้อนรับ', style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),),
 
-              SizedBox(height: 10),
+            SizedBox(height: 10),
 
-                Text(
-                  'ชื่อผู้ใช้: $_username',
-                  style: GoogleFonts.kanit(
-                    fontSize: 20,
-                    color: _username.isEmpty ? Colors.grey : Colors.black,
-                  ),
+              Text(
+                'ชื่อผู้ใช้: $_username',
+                style: GoogleFonts.kanit(
+                  fontSize: 20,
+                  color: _username.isEmpty ? Colors.grey : Colors.black,
                 ),
+              ),
 
-              SizedBox(height: 10),
+            SizedBox(height: 10),
 
-                Text(
-                  'อีเมล: $_email',
-                  style: GoogleFonts.kanit(
-                    fontSize: 18,
-                    color: _email.isEmpty ? Colors.grey : Colors.black,
-                  ),
+              Text(
+                'อีเมล: $_email',
+                style: GoogleFonts.kanit(
+                  fontSize: 18,
+                  color: _email.isEmpty ? Colors.grey : Colors.black,
                 ),
+              ),
           ],
         ),
       ),
