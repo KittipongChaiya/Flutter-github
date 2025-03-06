@@ -171,7 +171,7 @@ class _HomeState extends State<Home> {
             SizedBox(height: 10),
 
               Text(
-                'อีเมล: $_email',
+                'อีเมลล์: $_email',
                 style: GoogleFonts.kanit(
                   fontSize: 18,
                   color: _email.isEmpty ? Colors.grey : Colors.black,
