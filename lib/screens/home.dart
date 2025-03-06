@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myproject/screens/account.dart';
 import 'package:myproject/screens/item.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -120,6 +121,12 @@ class _HomeState extends State<Home> {
               title: Text('จัดการข้อมูล',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Item()));
+              },
+            ),
+            ListTile(
+              title: Text('จัดการบัญชี',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Account()));
               },
             ),
             ListTile(
