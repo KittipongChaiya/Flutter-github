@@ -96,9 +96,7 @@ class _ItemState extends State<Item> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "My Title",
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(
             "แบบฟอร์มแสดงข้อมูล",
@@ -191,26 +189,11 @@ class _ItemState extends State<Item> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 20), 
-                  SizedBox(
-                    width: 50,
-                    height: 100,
-                    child: IconButton(
-                      icon: const Icon(Icons.home, size: 50, color: Colors.blue),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => MyApp()));
-                      },
-                    ),
-                  ),
                 ],
               ),
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }
