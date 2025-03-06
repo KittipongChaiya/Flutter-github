@@ -44,9 +44,9 @@ exports.loginUser = async (req, res) => {
 
     const user = result.rows[0];
     
-    // แก้ไข payload ของ token
+    // payload ของ token
     const token = jwt.sign(
-      { id: user.id }, // ใช้ id แทน userId
+      { id: user.id },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
