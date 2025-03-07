@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/main.dart';
 import 'package:myproject/models/person.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myproject/screens/addform.dart';
+import 'package:myproject/screens/addform_item.dart';
 
 class Item extends StatefulWidget {
   const Item({super.key});
