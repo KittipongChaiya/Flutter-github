@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:myproject/models/transaction.dart';
+import 'package:myproject/models/transactions.dart';
 import 'package:myproject/screens/addform_account.dart';
 import 'package:provider/provider.dart';
 import 'package:myproject/providers/transaction_provider.dart';
@@ -36,7 +36,7 @@ class Account extends StatelessWidget {
       
       body: Consumer(
         builder: (context, TransactionProvider provider, Widget? child) {
-          var count = provider.transactions.length;
+          var count = provider.transaction.length;
           if (count <= 0) {
             return Center(
               child: Text("ไม่มีข้อมูล", style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Colors.black)),),
@@ -45,7 +45,7 @@ class Account extends StatelessWidget {
             return ListView.builder(
             itemCount: count,
             itemBuilder: (context, index){
-              Transaction data = provider.transactions[index];
+              Transactions data = provider.transaction[index];
               return Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

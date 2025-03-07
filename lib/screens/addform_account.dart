@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myproject/models/transaction.dart';
+import 'package:myproject/models/transactions.dart';
 import 'package:myproject/providers/transaction_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -92,7 +92,7 @@ class _FormAccountState extends State<FormAccount> {
                     var amount = _amountController.text;
 
                     //เตรียมข้อมูลให้ส่งไป Provider
-                    Transaction statement = Transaction(title: title, amount: double.parse(amount), date: DateTime.now());
+                    Transactions statement = Transactions(title: title, amount: double.parse(amount), date: DateTime.now());
 
                     //เรียก Provider
                     var provider = Provider.of<TransactionProvider>(context, listen: false);
