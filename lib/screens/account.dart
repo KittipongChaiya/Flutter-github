@@ -6,8 +6,19 @@ import 'package:myproject/screens/addform_account.dart';
 import 'package:provider/provider.dart';
 import 'package:myproject/providers/transaction_provider.dart';
 
-class Account extends StatelessWidget {
+class Account extends StatefulWidget {
   const Account({super.key});
+
+  @override
+  State<Account> createState() => _AccountState();
+}
+
+class _AccountState extends State<Account> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<TransactionProvider>(context, listen: false).initData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +47,7 @@ class Account extends StatelessWidget {
       
       body: Consumer(
         builder: (context, TransactionProvider provider, Widget? child) {
-          var count = provider.transaction.length;
+          var count = provider.transactions.length;
           if (count <= 0) {
             return Center(
               child: Text("ไม่มีข้อมูล", style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Colors.black)),),
@@ -45,7 +56,7 @@ class Account extends StatelessWidget {
             return ListView.builder(
             itemCount: count,
             itemBuilder: (context, index){
-              Transactions data = provider.transaction[index];
+              Transactions data = provider.transactions[index];
               return Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
