@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/screens/account.dart';
 import 'package:myproject/screens/item.dart';
 import 'package:http/http.dart' as http;
+import 'package:myproject/screens/profile.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:myproject/screens/login.dart';
@@ -110,13 +111,14 @@ class _HomeState extends State<Home> {
               accountName: Text('$_username'),
               accountEmail: Text('$_email'),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  'JD',
-                  style: TextStyle(fontSize: 40.0),
+                backgroundColor: Colors.brown,
+                child:
+                  Image.asset(
+                  'assets/images/w.png',
+                  width: 200,
+                  height: 200)
                 ),
               ),
-            ),
             ListTile(
               title: Text('จัดการข้อมูล',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
               onTap: () {
@@ -127,6 +129,12 @@ class _HomeState extends State<Home> {
               title: Text('จัดการบัญชี',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Account()));
+              },
+            ),
+            ListTile(
+              title: Text('จัดการโปรไฟล์',style: GoogleFonts.kanit(textStyle: TextStyle(fontSize: 20)),),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
               },
             ),
             ListTile(

@@ -8,5 +8,7 @@ router.post('/login', userController.loginUser);
 router.post('/check-email', userController.checkEmail);
 const { getUserData } = require('../controllers/userController');
 router.get('/user', authenticateToken, getUserData);
+const { updateUserData } = require('../controllers/userController');
+router.put('/user', authenticateToken, updateUserData);
 
 module.exports = router;

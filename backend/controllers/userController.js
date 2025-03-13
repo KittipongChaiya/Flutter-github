@@ -118,3 +118,57 @@ exports.getUserData = async (req, res) => {
     });
   }
 };
+
+exports.updateUserData = async (req, res) => {
+  try {
+    const userId = req.user.id; // มาจาก JWT token
+    const { username, email, password } = req.body;
+
+    // ตรวจสอบว่า userId มีค่าหรือไม่
+    if (!userId) {
+      return res.status(400).json({ 
+        message: 'ไม่พบข้อมูลผู้ใช้ใน Token' 
+      });
+    }
+
+    let query;
+    let values;
+    
+    if (password) {
+      query = `
+        UPDATE users 
+        SET username = $1, email = $2, password = $3
+        WHERE id = $4
+        RETURNING username, email
+      `;
+      values = [username, email, password, userId];
+    } else {
+      query = `
+        UPDATE users 
+        SET username = $1, email = $2
+        WHERE id = $3
+        RETURNING username, email
+      `;
+      values = [username, email, userId];
+    }
+    
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ 
+        message: 'ไม่พบข้อมูลผู้ใช้ในระบบ' 
+      });
+    }
+
+    res.status(200).json({
+      message: 'อัปเดตข้อมูลสำเร็จ',
+      user: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    res.status(500).json({ 
+      message: 'เกิดข้อผิดพลาดในการอัปเดตข้อมูลผู้ใช้', 
+      error: error.toString() 
+    });
+  }
+};
