@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:myproject/screens/home.dart';
 import 'package:myproject/screens/login.dart';
+import 'package:provider/provider.dart';
+import 'package:myproject/providers/transaction_provider.dart';
 
-void main() {
+/*void main() {
   
   /* 
   const app = MaterialApp(
@@ -19,7 +22,7 @@ void main() {
   */
 
   runApp( MyApp());
-}
+}*/
 
 /*
 class MyApp extends StatelessWidget {
@@ -43,6 +46,15 @@ class MyApp extends StatelessWidget {
 }
 */
 
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => TransactionProvider(),
+      child: MyApp(),
+    )
+  );
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -51,7 +63,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: Home(),
     );
   }
 }
